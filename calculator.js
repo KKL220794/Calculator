@@ -1,6 +1,9 @@
+// getting the array of numbers 
 var numbers = document.getElementsByClassName('number');
 
 for (var i = 0; i< numbers.length ; i++) {
+
+    // adding click listener to the numbers button
     numbers[i].addEventListener('click', function() {
         if (+getOutput() !==NaN) {
             document.getElementById('output-value').innerText = getOutput() + this.id;
@@ -9,10 +12,12 @@ for (var i = 0; i< numbers.length ; i++) {
     });
 }
 
+// function to get the inner text of the output divison 
 var getOutput = function() {
     return document.getElementById('output-value').innerText;
 }
 
+// function to get the inner text of the history divison 
 var getHistory = function() {
     return document.getElementById('history-value').innerText;
 }
@@ -27,19 +32,28 @@ for (var j = 0; j< operators.length ; j++){
         } else  if (this.id === 'back' ) {
             printOutput(getOutput().substr(0,getOutput().length -1));
         } else {
-            var output = getOutput();
+            var output = getOutput();  
             var history = getHistory();
-            if(output !== '' && history === '') {
-                printHistory(output + this.id);
-                printOutput('');
-            } else if (output === '' && history !== ''){
-                printHistory(history.substr(0,history.length -1) + this.id);
-            } else if (output !=='' && history !== ''){
+
+            // to get history without the last operator
+            if (output === '' && history !== ''){
+                if(isNaN(history[history.length-1])){
+					history= history.substr(0,history.length-1);
+                }
+            } 
+            if (output !=='' || history !== ''){
+                history = history + output;
+
+                // when operator is equals
                 if (this.id === '=') {
-                printOutput(eval(output));
+                printOutput(eval(history));
                 printHistory('');
-            }
-            }
+                } else {
+                    history += this.id;
+                    printHistory(history);
+                    printOutput('')
+                }
+            } 
         }
         // document.getElementById('history-value').innerText = getOutput() + this.id;
     });
